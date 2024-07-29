@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>Plash Magazine</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+
+    <link rel="icon" type="image/png" href="images/logopng.png" />
+  </head>
+  <body>
+    <style type="text/css">
+      body {
+        background-color: #333 !important;
+        margin: 0;
+        padding: 0;
+      }
+      ::-webkit-scrollbar {
+        width: 12px;
+        background-color: #ffffff00;
+      }
+      ::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: #03887600;
+      }
+      .container {
+        height: 95vh;
+        width: 95%;
+        margin: 20px auto;
+        /*  border: 2px solid red;
+      box-shadow: 0 0 5px red;
+      */
+      }
+      .fullscreen {
+        background-color: #ffffff00;
+      }
+    </style>
+
+    <div class="container" id="container"></div>
+
+    <script src="/public/js/libs/jquery.min.js"></script>
+    <script src="js/libs/html2canvas.min.js"></script>
+    <script src="js/libs/three.min.js"></script>
+    <script src="js/libs/pdf.min.js"></script>
+
+    <script src="js/dist/3dflipbook.js"></script>
+    <script type="text/javascript">
+      function enviarPdfName() {
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const nameBook = urlSearchParams.get("slug");
+
+        const enviarPdfName = fetch("/read", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ nameBook }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+       
+
+            $("#container").FlipBook({
+              pdf: data[0].magazine_pdf,
+              controlsProps: {
+                loadingAnimation: {
+                  book: false,
+                },
+                cmdPrint: {
+                  print: false,
+                },
+                share: false, // Disable sharing
+              },
+              propertiesCallback: function (props) {
+                props.page.depth /= 2.5;
+                props.cover.padding /= 0.002;
+                return props;
+              },
+              template: {
+                html: "templates/default-book-view.html",
+                styles: ["css/short-black-book-view.css"],
+                links: [
+                  {
+                    rel: "stylesheet",
+                    href: "css/font-awesome.min.css",
+                  },
+                ],
+                script: "js/default-book-view.js",
+                sounds: {
+                  startFlip: "sounds/start-flip.mp3",
+                  endFlip: "sounds/end-flip.mp3",
+                },
+              },
+            });
+          })
+          .catch((error) =>
+            console.error("Erro ao obter o caminho do PDF:", error)
+          );
+      }
+      enviarPdfName();
+
+      // controlsProps: {
+      //  downloadURL: 'books/pdf/CondoLiving.pdf',}
+    </script>
+  </body>
+</html>

@@ -1,0 +1,298 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model admin {
+  id       Int     @id @default(autoincrement())
+  name     String
+  email    String  @unique
+  password String
+  avatar   String?
+  role     String
+
+  @@map("admin")
+}
+
+model users {
+  id                     Int              @id @default(autoincrement())
+  name                   String?
+  lastName               String?
+  password               String?
+  email                  String?          @unique
+  cep                    String?
+  city                   String?
+  district               String?
+  adress                 String?
+  numberAdress           String?
+  complement             String?
+  avatar                 String?
+  createDate             DateTime         @default(now())
+  upDateDate             DateTime         @default(now())
+  availableForWithdrawal Float?           @default(0)
+  crsfToken              String?
+  oTPId                  Int?
+  articlesByUser         articlesByUser[]
+  vote                   coverOfMonth[]
+  dvlClient              dvls[]
+  library                libraryUser[]
+  orders                 orders[]
+  OTP                    OTP?             @relation(fields: [oTPId], references: [id])
+
+  @@map("users")
+}
+
+model OTP {
+  id        Int      @id @default(autoincrement())
+  otp       String
+  expireAt  DateTime
+  createdAt DateTime @default(now())
+  user      users[]
+
+  @@map("otps")
+}
+
+model employee {
+  id           Int             @id @default(autoincrement())
+  name         String
+  email        String          @unique
+  password     String
+  profession   String
+  phone        String
+  commission   Float
+  avatar       String?
+   availableForWithdrawal Float           @default(0)
+  createDate   DateTime        @default(now())
+  upDateDate   DateTime        @default(now())
+  dvl_employee dvls_Employee[] @relation("dvls_EmployeeToemployee")
+  magazines    magazines[]     @relation("employeeTomagazines")
+
+  @@map("employee")
+}
+
+model magazines {
+  id           Int         @id @default(autoincrement())
+  name         String
+  author       String
+  cover        String
+  company      String
+  volume       String
+  views        Int?        @default(0)
+  description  String
+  slug         String?
+  price        Float
+  magazine_pdf String
+  view         Int?        @default(0)
+  subCategory  String?
+  model        String?
+  createDate   DateTime    @default(now())
+  updateAt     DateTime    @default(now())
+  categoryId   Int?
+  article      articles[]
+  Category     categories? @relation(fields: [categoryId], references: [id])
+  employees    employee[]  @relation("employeeTomagazines")
+
+  @@map("magazines")
+}
+
+model articles {
+  id           Int         @id @default(autoincrement())
+  name         String
+  cover        String
+  views        Int?        @default(0)
+  author       String
+  description  String
+  status       String
+  createDate   DateTime    @default(now())
+  updateAt     DateTime    @default(now())
+  magazineId   Int?
+  company      String?
+  categoriesId Int?
+  categories   categories? @relation(fields: [categoriesId], references: [id])
+  magazine     magazines?  @relation(fields: [magazineId], references: [id])
+
+  @@map("articles")
+}
+
+model categories {
+  id         Int         @id @default(autoincrement())
+  name       String
+  createDate DateTime    @default(now())
+  updateAt   DateTime    @default(now())
+  article    articles[]
+  magazine   magazines[]
+
+  @@map("categories")
+}
+
+model dvls {
+  id                     Int      @id @default(autoincrement())
+  name                   String
+  price                  Int?
+  picture                String?
+  paidOut                Float?
+  toReceive              Float?
+  userId                 Int?
+  createDate             DateTime @default(now())
+  upDateDate             DateTime @default(now())
+  user                   users?   @relation(fields: [userId], references: [id])
+
+  @@map("dvls")
+}
+
+model dvls_Employee {
+  id         Int        @id @default(autoincrement())
+  name       String
+  price      Int?
+  picture    String?
+  paidOut    Float
+  toReceive  Float
+  createDate DateTime   @default(now())
+  upDateDate DateTime   @default(now())
+  employee   employee[] @relation("dvls_EmployeeToemployee")
+
+  @@map("dvls_employees")
+}
+
+model orders {
+  id            Int      @id @default(autoincrement())
+  items         Json[]
+  createDate    DateTime @default(now())
+  updateAt      DateTime @default(now())
+  userId        Int?
+  status        Status   @default(andamento)
+  codeEnv       String?
+  city          String?
+  amout         Float?
+  name          String?
+  email         String?
+  street        String?
+  street_number String?
+  complement    String?
+  zip_code      String?
+  neighborhood  String?
+  state         String?
+  country       String?
+  phone         String?
+  user          users?   @relation(fields: [userId], references: [id])
+
+  @@map("orders")
+}
+
+model libraryUser {
+  id           Int      @id @default(autoincrement())
+  name         String
+  author       String
+  cover        String[]
+  magazine_pdf String
+  userId       Int?
+  createDate   DateTime @default(now())
+  upDateDate   DateTime @default(now())
+  user         users?   @relation(fields: [userId], references: [id])
+
+  @@map("libraryUser")
+}
+
+model articlesByUser {
+  id         Int      @id @default(autoincrement())
+  name       String
+  cover      String
+  volume     String
+  author     String
+  articlepdf String
+  createDate DateTime @default(now())
+  updateAt   DateTime @default(now())
+  company    String?
+  userId     Int?
+  user       users?   @relation(fields: [userId], references: [id])
+
+  @@map("articlesByUser")
+}
+
+model banners {
+  id         Int      @id @default(autoincrement())
+  name       String
+  cover      String
+  createDate DateTime @default(now())
+  upDateDate DateTime @default(now())
+
+  @@map("banners")
+}
+
+model eventOfCoverMonth {
+  id          Int            @id @default(autoincrement())
+  name        String
+  description String?
+  date_event  String?
+  event_end   DateTime?
+  createDate  DateTime       @default(now())
+  upDateDate  DateTime       @default(now())
+  cover       coverOfMonth[]
+
+  @@map("eventOfCoverMonth")
+}
+
+model coverOfMonth {
+  id                  Int                @id @default(autoincrement())
+  name                String
+  cover               String
+  countLike           Int?               @default(0)
+  userId              Int?
+  createDate          DateTime           @default(now())
+  upDateDate          DateTime           @default(now())
+  eventOfCoverMonthId Int?
+  eventOfCoverMonth   eventOfCoverMonth? @relation(fields: [eventOfCoverMonthId], references: [id])
+  user                users?             @relation(fields: [userId], references: [id])
+
+  @@map("coverOfMonth")
+}
+
+model EventsofMonth {
+  id                 Int        @id @default(autoincrement())
+  name               String
+  organizer          String
+  email              String
+  phone              String
+  cover              String
+  banner             String
+  descript           String
+  date_event_initial String
+  date_event_end     String
+  createDate         DateTime   @default(now())
+  upDateDate         DateTime   @default(now())
+  sponsors           sponsors[]
+
+  @@map("EventsofMonth")
+}
+
+model sponsors {
+  id              Int            @id @default(autoincrement())
+  name            String
+  company         String
+  email           String         @unique
+  phone           String
+  cover           String
+  url             String
+  createDate      DateTime       @default(now())
+  upDateDate      DateTime       @default(now())
+  eventsofMonthId Int?
+  EventsofMonth   EventsofMonth? @relation(fields: [eventsofMonthId], references: [id])
+
+  @@map("sponsors")
+}
+
+enum Status {
+  andamento
+  enviado
+  entregue
+}
+
+enum Role {
+  admin
+  user
+  employee
+}
