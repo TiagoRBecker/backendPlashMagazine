@@ -1,6 +1,7 @@
 import prisma from "../server/prisma";
 import { Request } from "express";
 import {  bucket, CloudStorageService } from "../service/cloudStorage";
+import { PrismaClient } from "@prisma/client";
 type Query = {
   page: string;
   author: string;
@@ -13,6 +14,14 @@ type Query = {
   take: number;
 };
 class Magazines {
+  private handleError() {
+  
+    throw new Error("Erro: Erro no servidor tente novamente mais tarde!");
+  }
+  //Função para desconetar o orm prisma
+  private async handleDisconnect() {
+    return await prisma?.$disconnect();
+  }
   async getAllMagazines(query: Query) {
     const { author, name, company, volume, category, take, page } = query;
     const totalTake = Number(take) || 8;
@@ -96,6 +105,7 @@ class Magazines {
         cover: true,
         volume: true,
         description: true,
+        model:true
       },
     });
 
@@ -207,69 +217,109 @@ class Magazines {
       console.log(error)
     } 
   }
-  async createMagazine(req:Request) {
-   
-
+  // FUnçao responsavel por pegar os dados da revista e criar
+  async  performMagazineCreation( magazineData: any,cover_file:any) {
+    const { author, company, name, description, categoryId, price, volume, subCategory, model, pdf } = magazineData;
+    const slug = `${name}#vol${volume}`;
+  
+    // Criar a revista no banco de dados
+    const createMagazine = await prisma?.magazines.create({
+      data: {
+        author,
+        company,
+        name,
+        description,
+        magazine_pdf: pdf,
+        price: Number(price),
+        slug: slug,
+        subCategory,
+        model,
+        volume,
+        cover: cover_file?.linkUrl,
+        categoryId: Number(categoryId),
+      },
+    });
+  
+    
+  
+    return createMagazine?.id;
+  }
+  //FUnçao responsavel por pegar os dados da revista e e adicionar os colabores nela 
+  async addEmployeeMagazine (employee:any,magazine:any){
+     
     try {
-        const {
-            author,
-            company,
-            name,
-            description,
-            categoryId,
-            price,
-            volume,
-            subCategory,
-            model,
-            pdf,
-          } = req.body;
-          const slug = `${name}#vol${volume}`;
-          const employes = JSON.parse(req.body.employes);
-      
-          const cover_file = req.file as any;
-          
-          
-          
-      await prisma?.$transaction(async (prisma) => {
-        // Criar a revista no banco de dados
-        const createMagazine = await prisma.magazines.create({
+      const updatePromises = employee.map((employee: any) =>
+        prisma?.employee.update({
+          where: { id: employee.id },
           data: {
-            author,
-            company,
-            name,
-            description,
-            magazine_pdf: pdf,
-            price: Number(price),
-            slug: slug,
-            subCategory,
-            model,
-            volume,
-            cover: cover_file?.linkUrl,
-            categoryId: Number(categoryId),
-          },
-        });
-
-        // Vincular a revista a cada funcionário
-        for (const employee of employes) {
-          const updateEmploye = await prisma.employee.update({
-            where: { id: employee.id },
-            data: {
-              magazines: {
-                connect: { id: createMagazine.id },
-              },
+            magazines: {
+              connect: { id: magazine },
             },
-          });
-        }
-        return { message: "Revista criada com sucesso!" };
-      });
+          },
+        })
+      );
+    
+    await Promise.all(updatePromises);
+    console.log("criou ")
+    return {message:"Criado com sucesos"}
+    } catch (error) {
+      console.log(error)
+      console.log("erro")
+    }
+     
+     
+        
       
+    
+  
+   
+  }
+  // Funçao que criar os dados baseadona revista e colaborador , fazendo dessa forma a performance e melhorada evitando  o delay no banco de dados
+  async createMagazine(req: Request) {
+    try {
+      const magazineData = req.body
+      const {
+        author,
+        company,
+        name,
+        description,
+        categoryId,
+        price,
+        volume,
+        subCategory,
+        model,
+        pdf,
+      } = req.body;
+      const slug = `${name}#vol${volume}`;
+      const employes = JSON.parse(req.body.employes);
+  
+      const cover_file = req.file as any;
+  
+      
+         await prisma?.$transaction(async (prisma) => {
+          
+           const id = await this.performMagazineCreation(magazineData,cover_file)
+            console.log("ida da magazine",id)
+          await this.addEmployeeMagazine(employes,id)
+        });
+ 
+
+        return { message: "Revista criada com sucesso!" };
+  
+        
+      
+      
+       
+    
     } catch (error) {
       console.log(error);
-    
-      
-     
-    } 
+      return this?.handleError()
+    }
+    finally{
+      await prisma?.$disconnect()
+    }
   }
+  
   async updateMagazine(req:Request){
     const { slug} = req.params
   

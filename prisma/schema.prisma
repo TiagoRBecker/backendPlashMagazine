@@ -262,6 +262,7 @@ model EventsofMonth {
   descript           String
   date_event_initial String
   date_event_end     String
+  views              Int @default(0)
   createDate         DateTime   @default(now())
   upDateDate         DateTime   @default(now())
   sponsors           sponsors[]

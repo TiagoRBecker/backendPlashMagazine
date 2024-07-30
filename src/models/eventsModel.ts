@@ -52,6 +52,16 @@ class PublicModel {
           }
         },
       });
+       await prisma?.eventsofMonth.update({
+        where:{
+          id:eventId?.id
+        },
+        data:{
+          views:{
+            increment:1
+          }
+        }
+       })
 
       return eventId;
     } catch (error) {
