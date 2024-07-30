@@ -165,7 +165,7 @@ class Employee {
   }
   async editEmployee(req: Request) {
     const { slug } = req.params;
-    const { name, email, profession, phone, avatar, password } = req.body;
+    const { name, email, profession, phone, avatar, password,commission } = req.body;
     const newProfile = req?.file as any;
    
     try {
@@ -181,6 +181,7 @@ class Employee {
           email,
           profession,
           phone,
+          commission:Number(commission),
           avatar: newProfile ? newProfile.linkUrl : avatar,
           password: hash,
         },

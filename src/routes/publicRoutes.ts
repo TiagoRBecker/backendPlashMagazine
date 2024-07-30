@@ -27,6 +27,7 @@ router.get("/articles-free", ArticleController.getArticleFree);
 router.get("/banners", BannerController.getAllBanners);
 router.get("/events", EventController.getAllEvents);
 
+router.get("/event/:slug", EventController.getEventID);
 router.get("/cover-events", CoversController.getAllCoverEvents);
 router.get("/sponsors", SponsorsController.getAllSponsorsPublic);
 
