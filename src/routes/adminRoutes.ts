@@ -10,7 +10,7 @@ import AdminBannerController from '../Controllers/Banner';
 import AdminSponsorController from '../Controllers/Sponsors';
 import AdminOrdersController from '../Controllers/Orders';
 import {AdminCategoriesController} from '../Controllers/Categories';
-import UserController from '../Controllers/User';
+import {AdminUserController} from '../Controllers/User';
 import AdminControllerEventCover from '../Controllers/CoversOfMonth';
 import { GCLOUD,upload } from '../utils/multerConfig';
 import {UploadPdf} from  "../Controllers/Upload/index"
@@ -77,12 +77,12 @@ router.post("/employee/commision/update/:slug",chekingTokenAdmin, AdminComission
 //         ###################################### ///
 //Users
 
-router.get("/users", UserController.getAllUsers);
-router.get("/users/:slug",chekingTokenAdmin, UserController.getOneUserAdmin);
-router.get("/last-users",chekingTokenAdmin, UserController.getLastUsers);
+router.get("/users", AdminUserController.getAllUsers);
+router.get("/users/:slug",chekingTokenAdmin, AdminUserController.getOneUserAdmin);
+router.get("/last-users",chekingTokenAdmin, AdminUserController.getLastUsers);
 
 //Route para pagar o usuario de forma unica 
-router.post("/user/finance/:slug",chekingTokenAdmin, UserController.updateDvlUser);
+router.post("/user/finance/:slug",chekingTokenAdmin, AdminUserController.updateDvlUser);
 
 //
 //Sponsors

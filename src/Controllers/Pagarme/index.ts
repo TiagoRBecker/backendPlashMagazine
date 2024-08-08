@@ -1,7 +1,7 @@
 import { Request, Response, response } from "express";
 import { io } from "../../server";
 import { createChekout } from "../../services/checkout";
-import { createLibrary } from "../../services/library";
+import { createLibrary, FindMgazines } from "../../services/library";
 import {
   createDvlsForClients,
   createDvlsForCollaborators,
@@ -118,28 +118,9 @@ class Pagarme {
 
       if (data && data.status === "paid") {
         const ids = data.items.map((items: any) => parseInt(items.code));
-        const getMagazines: any = await prisma?.magazines.findMany({
-          where: {
-            id: {
-              in: ids,
-            },
-          },
-          select: {
-            author: true,
-            company: true,
-            Category: true,
-            cover: true,
-            model: true,
-            magazine_pdf: true,
-            description: true,
-            name: true,
-            employees: true,
-            article: true,
-            price: true,
-          },
-        });
+        const magazines = await FindMgazines(ids)
 
-        const articles = getMagazines.map((magazine: any) => magazine.article);
+        const articles = magazines.map((magazine: any) => magazine.article);
         const articleIds = articles.flat().map((article: any) => {
           return {
             name: article.name,
@@ -153,10 +134,10 @@ class Pagarme {
         });
 
         Promise.all([
-          createChekout(data, getMagazines),
-          DvlModel.createDVL(data, getMagazines),
-          CommissionModel.createDvlsForCollaborators(getMagazines),
-          createLibrary(data, getMagazines, articleIds),
+          createChekout(data, magazines),
+          DvlModel.createDVL(data, magazines),
+          CommissionModel.createDvlsForCollaborators(magazines),
+          createLibrary(data, magazines, articleIds),
         ]);
 
         io.emit("newOrder", "Um novo Pedido foi solicitado");

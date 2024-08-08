@@ -12,6 +12,9 @@ class PublicModel {
   async getAllEvents(req: Request) {
     try {
       const covers = await prisma?.eventsofMonth.findMany({
+        orderBy:{
+          createDate:"desc"
+        },
         include: {
           sponsors: {
             select: {

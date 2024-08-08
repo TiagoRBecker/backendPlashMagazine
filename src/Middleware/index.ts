@@ -68,9 +68,10 @@ export const chekingTokenUser = async (
       next();
     } catch (error) {
       console.error("Erro durante a verificação do token:", error);
-      return res.status(401).json({ msg: "Não autorizado" });
+      return res.status(401).json({ msg: "Não autorizado para essa rota!" });
     }
-  } else {
+  }
+  else{
     return res.status(401).json({ msg: "Tipo de autenticação inválido" });
   }
 };
@@ -162,5 +163,25 @@ export const chekingTokenAdmin = async (
     }
   } else {
     return res.status(401).json({ msg: "Tipo de autenticação inválido" });
+  }
+};
+export const checkingTokenValidation = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const secret = process.env.SECRET;
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) {
+    return res.status(401).json({ message: 'Token não fornecido' });
+  }
+
+  try {
+    const payload = Jwt.verify(token, secret as string);
+    // Se o token for válido, retorne uma resposta bem-sucedida
+    res.status(200).json({ message: 'Token válido'});
+  } catch (error) {
+    // Se o token for inválido ou expirado
+    res.status(401).json({ message: 'Token inválido ou expirado' });
   }
 };

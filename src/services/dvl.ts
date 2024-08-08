@@ -10,7 +10,7 @@ export const createDvlsForCollaborators = async(magazines:any)=> {
                 data: {
                     name: magazine.name,
                     price: magazine.price,
-                    picture: magazine.cover[0],
+                    picture: magazine.cover,
                     paidOut: Math.round(Number(magazine.price * employee.commission) * 100) / 100,
                     toReceive: 0,
                     employee: { connect: { id: employee.id } },
@@ -29,7 +29,7 @@ export const createDvlsForClients = async(data:any,magazines:any)=> {
         return {
           name: items.name,
           price: items.price,
-          picture: items.cover[0],
+          picture: items.cover,
           paidOut: Number(items.price * 2),
           toReceive: 0,
           userId: Number(data.metadata.id),

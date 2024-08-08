@@ -1,19 +1,36 @@
 import prisma from "../server/prisma";
-
+export const FindMgazines = async (ids:[number])=>{
+  const getMagazines: any = await prisma?.magazines.findMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+    select: {
+      author: true,
+      company: true,
+      Category: true,
+      cover: true,
+      model: true,
+      magazine_pdf: true,
+      description: true,
+      name: true,
+      employees: true,
+      article: true,
+      price: true,
+      subCategory:true,
+    },
+  });
+  return getMagazines
+}
 export const createLibrary = async (data: any, magazines: any, articleIds: any) => {
-  try {
-    const library = magazines?.map((item: any) => {
-      return {
-        name: item.name,
-        author: item.author,
-        magazine_pdf: item.magazine_pdf,
-        cover: item.cover,
-        model: item.model
-      };
-    });
 
-    for (const item of library) {
-      if (item.model === "Digital") {
+  try {
+   
+   
+
+    for (const item of magazines) {
+      if (item.model === "Digital" || item.model === "digital") {
        
         await prisma?.users.update({
           where: {
@@ -25,7 +42,9 @@ export const createLibrary = async (data: any, magazines: any, articleIds: any) 
                 name: item.name,
                 author: item.author,
                 magazine_pdf: item.magazine_pdf,
-                cover: item.cover
+                cover: item.cover,
+                subCategory:item.subCategory,
+
 
               }
             },

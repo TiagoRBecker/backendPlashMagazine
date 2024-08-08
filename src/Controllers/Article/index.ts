@@ -16,7 +16,7 @@ class Article {
 
  
   async getOneArticlePublic(req: Request,res:Response) {
-    const { slug } = req.params;
+  
 
     try {
        const articles = await PublicArticleModel.getOneArticle(req)

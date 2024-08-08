@@ -16,6 +16,7 @@ class Article {
   //Retorna um artigo 
   async getOneArticle(req: Request) {
     const { slug } = req.params;
+    
      if(!slug){
       throw new Error ("Artigo não encontrado!")
      }
@@ -50,7 +51,7 @@ class Article {
       console.log(error)
       return this?.handleError();
     } finally {
-      return this?.handleDisconnect();
+      await this?.handleDisconnect();
     }
   }
   //Retorna os artigos mais visualizados com views de 5  +
@@ -87,8 +88,11 @@ class Article {
   }
   //Retorna os artigos recomendados
   async getArticleRecommended(req: Request) {
+     const { take} = req.query
+     console.log(take)
     try {
       const recommendedArticle = await prisma?.articles.findMany({
+        take:Number(take) || 50,
         where: {
           status: "recommended",
         },

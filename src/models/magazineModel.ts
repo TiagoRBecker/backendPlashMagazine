@@ -93,7 +93,7 @@ class Magazines {
   }
   async getLastMagazines() {
     const getLastMagazine = await prisma?.magazines.findMany({
-      take: 4,
+      take: 8,
       orderBy: {
         createDate: "asc",
       },
@@ -206,7 +206,7 @@ class Magazines {
           id: Number(slug),
         },
         data: {
-          view: {
+          views: {
             increment: 1,
           },
         },
@@ -274,23 +274,12 @@ class Magazines {
   
    
   }
-  // Funçao que criar os dados baseadona revista e colaborador , fazendo dessa forma a performance e melhorada evitando  o delay no banco de dados
+  // Funçao que criar os dados baseado na revista e colaborador , fazendo dessa forma a performance e melhorada evitando  o delay no banco de dados
   async createMagazine(req: Request) {
     try {
       const magazineData = req.body
-      const {
-        author,
-        company,
-        name,
-        description,
-        categoryId,
-        price,
-        volume,
-        subCategory,
-        model,
-        pdf,
-      } = req.body;
-      const slug = `${name}#vol${volume}`;
+      
+      const slug = `${magazineData.name}#vol${magazineData.volume}`;
       const employes = JSON.parse(req.body.employes);
   
       const cover_file = req.file as any;
@@ -299,7 +288,7 @@ class Magazines {
          await prisma?.$transaction(async (prisma) => {
           
            const id = await this.performMagazineCreation(magazineData,cover_file)
-            console.log("ida da magazine",id)
+           
           await this.addEmployeeMagazine(employes,id)
         });
  
@@ -344,7 +333,7 @@ class Magazines {
             pdf,
           } = req.body;
           
-        
+          
             const employes = JSON.parse(req.body.employes);
             const slugHash = `${name}#vol${volume}`;
             //@ts-ignore
@@ -382,6 +371,7 @@ class Magazines {
               }
               return updateMagazine ;
             });
+            
     } catch (error) {
         console.error("Erro ao atualizar a revista:", error);
       throw new Error("Erro ao atualizar a revista. Verifique os detalhes e tente novamente.");

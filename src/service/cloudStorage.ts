@@ -47,7 +47,7 @@ class CloudStorage {
           
           filename: (req:any, file:any, cb:any) => {
             const filename = `${Date.now()}-${file.originalname}`;
-            cb(null, filename);
+            cb(null, filename.trim());
           }
         }),
     }).single(file)

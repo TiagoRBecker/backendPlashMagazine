@@ -9,6 +9,7 @@ import { EventController } from "../Controllers/Events";
 import SponsorsController from "../Controllers/Sponsors";
 const { Storage } = require("@google-cloud/storage");
 import teste from "../utils/cloud.json";
+import { checkingTokenValidation } from "../Middleware";
 const path = require("path");
 const router = Router();
 
@@ -18,6 +19,7 @@ router.get("/magazine/:slug", MagazineController.getOneMagazine);
 router.get("/last-magazines", MagazineController.getLastMagazines);
 router.get("/categories", CategoriesController.getAllCategories);
 router.get("/category/:slug", CategoriesController.getOneCategory);
+router.get("/article/:slug", ArticleController.getOneArticlePublic);
 router.get("/articles-most-read", ArticleController.getArticleMostViews);
 router.get("/articles-recommended", ArticleController.getArticleRecommended);
 router.get("/articles/:slug", ArticleController.getOneArticlePublic);
@@ -30,6 +32,6 @@ router.get("/events", EventController.getAllEvents);
 router.get("/event/:slug", EventController.getEventID);
 router.get("/cover-events", CoversController.getAllCoverEvents);
 router.get("/sponsors", SponsorsController.getAllSponsorsPublic);
-
+router.get("/validate-token",checkingTokenValidation)
 
 export default router;

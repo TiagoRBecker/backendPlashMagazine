@@ -187,8 +187,9 @@ model libraryUser {
   id           Int      @id @default(autoincrement())
   name         String
   author       String
-  cover        String[]
+  cover        String?
   magazine_pdf String
+  subCategory String?
   userId       Int?
   createDate   DateTime @default(now())
   upDateDate   DateTime @default(now())

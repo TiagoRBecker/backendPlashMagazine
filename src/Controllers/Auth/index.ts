@@ -114,31 +114,18 @@ class Auth {
         const token = jwt.sign(
           {
             id: user?.id,
-            crsfToken: credentials.csrfToken,
+           
           },
           process.env.SECRET as string,
           { expiresIn: "1d" }
         );
   
-        const saveToken = await prisma?.users.update({
-          where: {
-            email: credentials.email,
-          },
-          data: {
-            crsfToken: token,
-          },
-        });
+        
         return res.status(200).json({
           id: user.id,
           name: user.name,
           email: user.email,
-          city: user.city,
-          adress: user.adress,
-          cep: user.cep,
-          numberAdress: user.numberAdress,
-          complement: user.complement,
-          district: user.district,
-          accessToken: token,
+          token
         });
       } else {
         return res.status(404).json({ message: "E-mail ou senha invalidos" });

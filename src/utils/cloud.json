@@ -1,0 +1,13 @@
+{
+    "type": "service_account",
+    "project_id": "lithe-lens-423414-q6",
+    "private_key_id": "9d414b1669fa87587cf545cac8a953e12a966d7a",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDdKwWTnCzbrrMX\njI9ExBimcVeMj6iQBl5jiq+5LVVhZ1CAG2qJij7FoGNSALSz5Qg25DOj0VbKVr6I\nM+uxdztHvJ+UEDWQ1F+895VRc/Ps9Z36vnWNRJ05XDfTGgZuGjgETcFhHtrJmmM9\nETI7ZVIzCZJPUy5YSAhrM/qmXY/y4HT2fS9n23vdnX4WHOdBR2nZuwRs07UCqlIV\nRpP/0gzAQSo/sLARUt+Orfz35E+DwjF3HYFRfSNqYMO04Kd3gdHlrzCi3vNUhIhn\nyofoe+L00PyULD+eJqFgPQJTDaV3T6ba7OP4eoA1gX5wtyir3ALQO/vRhFhu0GP6\nklbnfwy/AgMBAAECggEAJbSg9cJpb2aAR+KBxmJ8JVwrZd5UCYHcc7IANVzCMqHv\neneyGRLFkuG+LQvLwuOoG9uZ5jLZThOt1gCsDQxbweYpeo+s4i0iyU+YWFOhYWOa\ndFYmKlhpSY8sQUQtlnXH2Qv8jPc6q6YzhwS4gKHMesEF/Zoby5c0QDqTX+uRkAFd\nLC2elqNLcLN5QdMoNj/8CGEUMKfmdv1InerOEo4ohH7x4yx6Im8iQJL8LbBKpO0E\n40HqS+tsqaNZMLzZxou1ieGWCb6NfIQXWRHHrvV1jkXPC0dgBqenYCRRMWvYpxRP\ncw6De+bLxaGY+aEymgrpV+h3DSO/oJDkgWh5mnYX8QKBgQDwVG47/RWbU2W4o0fv\no7hPiFILGdLTBunV9fMXTA7sBT8rEeYwbzDcI0vUYhSPsje/mVrHBU6Ii64QRypQ\nstn3K56/WxyxacNoU0Czx1vY2OBIKAThk92+X3NEvdWLqBPwAmJE45uRX/iVs3oB\n9riniNioo0YLM9qoPJiadsHjiQKBgQDrlr6UXuJVHkG3WcGa/ornQsoWIZRSNfSB\nReahcgV1H+0dZcfPjcHy7eML3E1Y6f77Pha8FqpFy3lsg0WZKL+ubHUHmdFCgts/\noHv46OUY2RLWQxXPOgS+n3abVbpg//3ckvr4qM9Esy5A/hOyiUuDW1N+T5ADN1Ps\nrREPhao0BwKBgHd4UVBK8KnFXITbzo/nYGFREA/qp242OpodaNnE+ooD1bIQdNDR\nBYX5meGbXENOwf3iO0lCbxbb8Qywg+2X61i++2x+25WqUPSUpk54pUT4Ew5rrnmA\n6zOO+ZtLj1Ocm0SturIqP5SWE9o/XUCKqKLIGYRDnjdFcMY/UVFABgSZAoGAdbIQ\nsgUZI5cDE7t2mp1R/akDVr0d4VhtN2wZhUx2Z4Y0qnwfr5RNcbTguhssVSBJr3Dc\nYMkd9dJqbgjC63pNELHEYbC5t3WyXP4rETYgxiIkZACN08JTfnwiAAZ7H1ykkd6o\nHTQQoGy3zeZhJs+qdwxYEQFknAa3GcV4gX2wg18CgYAzNIWZjdlJYiTPcXK1tzS2\nVmfZ5xgtFLPzXRFW/NUmwJR6cipW/cwtYuCsABNWKJ0bzCH8L8uZ3+C3hpL9mkhP\nqUMfc3EwyeucB7bq4CR0f/cLHvEDm7O0TO1/nmiokg/M6/RhEqvKmoAWy7qNdwtp\nhcVz7Pi61r/yWKxtv07mkg==\n-----END PRIVATE KEY-----\n",
+    "client_email": "plash-bucket@lithe-lens-423414-q6.iam.gserviceaccount.com",
+    "client_id": "110741316380390251823",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/plash-bucket%40lithe-lens-423414-q6.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+  }

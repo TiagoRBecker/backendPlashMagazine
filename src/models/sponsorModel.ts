@@ -143,9 +143,11 @@ class Sponsor {
     const { slug } = req.params;
     const { name, url, cover, email, phone, company } = req.body;
     const file = req.file as any
+   
+    
     try {
    
- 
+  
      
         const update = await prisma?.sponsors.update({
           where: {
@@ -157,16 +159,19 @@ class Sponsor {
             email,
             company,
             phone,
-            cover: file ? file?.linkurl : cover,
+          
+            cover: file ? file?.linkUrl : cover,
           },
         });
+        
+       
         return { message: "Patrocinador  editado com sucesso!" };
       
     } catch (error) {
       console.log(error);
       return this?.handleError(error);
     } finally {
-      return this?.handleDisconnect();
+      await this?.handleDisconnect();
     }
   }
   async deleteSponsor(req: Request) {
