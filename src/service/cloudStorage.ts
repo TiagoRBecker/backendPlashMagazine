@@ -5,33 +5,35 @@ const { v4: uuidv4 } = require('uuid');
 
 import path from "path";
 const { Storage } = require("@google-cloud/storage");
-const keyFilenamePath = path.resolve(__dirname, "../utils/cloud.json");
+const credentials = JSON.stringify(process.env.CRED)
 export const storage = new Storage({
     
-    keyFilename: keyFilenamePath,
+    keyFilename: credentials,
   });
   export const bucket = storage.bucket("plash_bucket");
   const uniqueId = uuidv4();
 class CloudStorage {
     
     async urlFilePublic (fileName:any){
+      try {
         const file = bucket.file(fileName);
-        
-        // Gere a URL assinada
         const [url] = await file.getSignedUrl({
-          action: "read",
+          action: 'read',
           expires: Date.now() + 60 * 60 * 1000, // 1 hora
         });
-        
-         
+        console.log('Signed URL:', url);
         return url
+      } catch (error) {
+        console.error('Error generating signed URL:', error);
+      }
+        
     }
     getMulter(file:string) {
         const upload = Multer({
           storage: new MulterGoogleCloudStorage({
             bucket: "plash_bucket",
             projectId: 'lithe-lens-423414-q6',
-            keyFilename: keyFilenamePath,
+            keyFilename: credentials,
             
           }),
         });
@@ -42,7 +44,7 @@ class CloudStorage {
         storage: new MulterGoogleCloudStorage({
           bucket: "public-plash-bucket",
           projectId: 'lithe-lens-423414-q6', // Substitua pelo seu ID do projeto
-          keyFilename: keyFilenamePath,
+          keyFilename: credentials,
           acl: 'publicRead', // Define os arquivos como publicamente legíveis
           
           filename: (req:any, file:any, cb:any) => {
@@ -57,7 +59,7 @@ class CloudStorage {
        storage: new MulterGoogleCloudStorage({
          bucket: "public-plash-bucket",
          projectId: 'lithe-lens-423414-q6', // Substitua pelo seu ID do projeto
-         keyFilename: keyFilenamePath,
+         keyFilename: credentials,
          acl: 'publicRead', // Define os arquivos como publicamente legíveis
          
          filename: (req:any, file:any, cb:any) => {

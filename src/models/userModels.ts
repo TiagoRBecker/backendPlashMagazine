@@ -277,7 +277,7 @@ class User {
     const { slug } = req.params;
     const id = req.user.id;
 
-    console.log(req.query);
+  
     if (!slug) {
       throw new Error("Erro ao localizar a revista!");
     }
