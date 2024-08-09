@@ -7,8 +7,6 @@ import { CategoriesController } from "../Controllers/Categories";
 import BannerController from "../Controllers/Banner";
 import { EventController } from "../Controllers/Events";
 import SponsorsController from "../Controllers/Sponsors";
-const { Storage } = require("@google-cloud/storage");
-import teste from "../utils/cloud.json";
 import { checkingTokenValidation } from "../Middleware";
 const path = require("path");
 const router = Router();

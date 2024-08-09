@@ -5,10 +5,10 @@ const { v4: uuidv4 } = require('uuid');
 
 import path from "path";
 const { Storage } = require("@google-cloud/storage");
-const credentials = JSON.stringify(process.env.CRED)
+const keyFilenamePath = path.resolve(__dirname, "../utils/cloud.json");
 export const storage = new Storage({
     
-    keyFilename: credentials,
+    keyFilename: keyFilenamePath,
   });
   export const bucket = storage.bucket("plash_bucket");
   const uniqueId = uuidv4();
@@ -21,7 +21,8 @@ class CloudStorage {
           action: 'read',
           expires: Date.now() + 60 * 60 * 1000, // 1 hora
         });
-        console.log('Signed URL:', url);
+     
+        ;
         return url
       } catch (error) {
         console.error('Error generating signed URL:', error);
@@ -33,7 +34,7 @@ class CloudStorage {
           storage: new MulterGoogleCloudStorage({
             bucket: "plash_bucket",
             projectId: 'lithe-lens-423414-q6',
-            keyFilename: credentials,
+            keyFilename: keyFilenamePath,
             
           }),
         });
@@ -44,7 +45,7 @@ class CloudStorage {
         storage: new MulterGoogleCloudStorage({
           bucket: "public-plash-bucket",
           projectId: 'lithe-lens-423414-q6', // Substitua pelo seu ID do projeto
-          keyFilename: credentials,
+          keyFilename: keyFilenamePath,
           acl: 'publicRead', // Define os arquivos como publicamente legíveis
           
           filename: (req:any, file:any, cb:any) => {
@@ -59,7 +60,7 @@ class CloudStorage {
        storage: new MulterGoogleCloudStorage({
          bucket: "public-plash-bucket",
          projectId: 'lithe-lens-423414-q6', // Substitua pelo seu ID do projeto
-         keyFilename: credentials,
+         keyFilename: keyFilenamePath,
          acl: 'publicRead', // Define os arquivos como publicamente legíveis
          
          filename: (req:any, file:any, cb:any) => {
